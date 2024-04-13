@@ -10,6 +10,12 @@ const Container = styled.div`
   justify-content: center;
   border-bottom: 4px solid rgba(217, 217, 217, 1);
   box-shadow: 0px 5px 8px 0px rgba(0, 0, 0, 0.25);
+
+  h2 {
+    &:hover {
+      cursor: pointer;
+    }
+  }
 `;
 
 export const Header = () => {

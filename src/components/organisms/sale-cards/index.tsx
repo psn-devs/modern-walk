@@ -7,6 +7,7 @@ import {
 } from "../../../styles/colors";
 import { Card } from "../../molecules";
 import { Typography } from "../../atoms/Typography";
+import { breakpoints } from "../../../styles/breakpoints";
 
 interface Item {
   id: string;
@@ -36,11 +37,17 @@ const DescriptionWrapper = styled.div<{ backgroundColor: string }>`
   align-items: center;
   padding: 12px 16px;
   max-width: 200px;
-  width: 100%;
+  min-height: 140px;
+  max-height: 140px;
+  width: calc(100% - 32px);
   gap: 12px;
   border-radius: 16px;
   background-color: ${({ backgroundColor }) =>
     backgroundColor ? backgroundColor : primaryWhite};
+
+  @media ${breakpoints.viewport_s} {
+    max-width: calc(100% - 32px);
+  }
 `;
 
 const TitleWrapper = styled.div`
@@ -49,6 +56,7 @@ const TitleWrapper = styled.div`
   align-items: center;
   justify-content: center;
   padding: 12px;
+  max-width: calc(100% - 24px);
 `;
 
 const ImageWrapper = styled.div`
@@ -64,42 +72,48 @@ const ImageWrapper = styled.div`
 export const SaleCards = ({ items }: IProps) => {
   return (
     <ItemsWrapper>
-      {items && Array.isArray(items) && items.length > 0
-        ? items.map((value: Item, index: number) => (
-            <Card
-              backgroundColor={primaryWhite}
-              gap={20}
-              alignItems="center"
-              justifyContent="space-between"
-              key={index}
+      {items && Array.isArray(items) && items.length > 0 ? (
+        items.map((value: Item, index: number) => (
+          <Card
+            backgroundColor={primaryWhite}
+            gap={20}
+            alignItems="center"
+            justifyContent="space-between"
+            key={index}
+          >
+            <TitleWrapper>
+              <Typography variant="h3">
+                {value.title && value.title.length > 20
+                  ? `${value.title.substring(0, 20)}...`
+                  : value.title}
+              </Typography>
+            </TitleWrapper>
+
+            <ImageWrapper>
+              <img src={value.image} alt="shirt" />
+            </ImageWrapper>
+
+            <DescriptionWrapper
+              backgroundColor={
+                value.category === "men's clothing" ? primaryGreen : primaryRed
+              }
             >
-              <TitleWrapper>
-                <Typography variant="h3">
-                  {value.title && value.title.length > 20
-                    ? `${value.title.substring(0, 20)}...`
-                    : value.title}
-                </Typography>
-              </TitleWrapper>
-              <ImageWrapper>
-                <img src={value.image} alt="shirt" />
-              </ImageWrapper>
-              <DescriptionWrapper
-                backgroundColor={
-                  value.category === "men's clothing"
-                    ? primaryGreen
-                    : primaryRed
-                }
-              >
-                <Typography variant="h3" color={primaryBlue}>
-                  Rs {value.price}
-                </Typography>
-                <Typography variant="h4">{value.description && value.description.length > 100
-                    ? `${value.description.substring(0, 99)}...`
-                    : value.description}</Typography>
-              </DescriptionWrapper>
-            </Card>
-          ))
-        : null}
+              <Typography variant="h3" color={primaryBlue}>
+                Rs {value.price}
+              </Typography>
+              <Typography variant="h4">
+                {value.description && value.description.length > 100
+                  ? `${value.description.substring(0, 100)}...`
+                  : value.description}
+              </Typography>
+            </DescriptionWrapper>
+          </Card>
+        ))
+      ) : (
+        <Typography variant="h4" color={primaryBlue}>
+          No data to display
+        </Typography>
+      )}
     </ItemsWrapper>
   );
 };

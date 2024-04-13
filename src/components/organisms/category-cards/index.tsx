@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import { primaryGreen, primaryRed } from "../../../styles/colors";
+import { useNavigate } from "react-router-dom";
+import { primaryGreen, primaryRed, primaryWhite } from "../../../styles/colors";
 import { Typography } from "../../atoms/Typography";
 import { Card } from "../../molecules";
-import { useNavigate } from "react-router-dom";
+import { breakpoints } from "../../../styles/breakpoints";
 
 const CategoryWrapper = styled.div`
   display: flex;
@@ -11,6 +12,18 @@ const CategoryWrapper = styled.div`
   justify-content: space-between;
   width: 100%;
   gap: 30px;
+
+  div:nth-child(1),
+  div:nth-child(2) {
+    text-align: center;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  @media ${breakpoints.viewport_s} {
+    flex-direction: column;
+  }
 `;
 
 export const CategoryCards = () => {
@@ -25,7 +38,7 @@ export const CategoryCards = () => {
         height={"200px"}
         onClick={() => navigate("/mens-clothing")}
       >
-        <Typography variant="h1">Men's Clothing</Typography>
+        <Typography variant="h1" color={primaryWhite}>Men's Clothing</Typography>
       </Card>
       <Card
         backgroundColor={primaryRed}
@@ -35,7 +48,7 @@ export const CategoryCards = () => {
         height={"200px"}
         onClick={() => navigate("/womens-clothing")}
       >
-        <Typography variant="h1">Women's Clothing</Typography>
+        <Typography variant="h1" color={primaryWhite}>Women's Clothing</Typography>
       </Card>
     </CategoryWrapper>
   );
