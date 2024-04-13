@@ -22,15 +22,12 @@ export const Home = () => {
   } = useGetMensProductsQuery();
   const { isLoading, isError, data } = useGetWomensProductsQuery();
 
-  console.log(isLoading, isError, data);
-  console.log(menIsLoading, menIsError, menData);
-
   return (
     <Container>
       <Typography variant="h3">Flash Sale</Typography>
       {isLoading || menIsLoading ? (
         <Spinner />
-      ) : isError ? (
+      ) : isError || menIsError ? (
         <ErrorMsg />
       ) : (
         <SaleCards
