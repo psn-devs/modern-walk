@@ -1,54 +1,48 @@
 import styled from "styled-components";
 import { Typography } from "../../atoms/Typography";
-import { Card } from "../../molecules";
-import { primaryGreen, primaryRed } from "../../../styles/colors";
+import { SaleCards, CategoryCards } from "../../organisms";
+import {
+  useGetMensProductsQuery,
+  useGetWomensProductsQuery,
+} from "../../../services/clothesAPI";
+import { Spinner, ErrorMsg } from "../../molecules";
 
 const Container = styled.main`
   display: flex;
   flex-direction: column;
-  padding: 24px;
-  gap: 12px;
-`;
-
-const CategoryWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-`;
-
-const ItemsWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 20px;
+  padding: 30px;
+  gap: 30px;
 `;
 
 export const Home = () => {
+  const {
+    isLoading: menIsLoading,
+    isError: menIsError,
+    data: menData,
+  } = useGetMensProductsQuery();
+  const { isLoading, isError, data } = useGetWomensProductsQuery();
+
+  console.log(isLoading, isError, data);
+  console.log(menIsLoading, menIsError, menData);
+
   return (
     <Container>
-      <Typography variant="h4">Flash Sale</Typography>
-
-      <ItemsWrapper>
-        <Card backgroundColor={primaryRed}>
-          <Typography variant="h2">Mens cloth</Typography>
-        </Card>
-        <Card backgroundColor={primaryRed}>
-          <Typography variant="h2">Mens cloth</Typography>
-        </Card>
-      </ItemsWrapper>
-
-      <Typography variant="h4">Categories</Typography>
-
-      <CategoryWrapper>
-        <Card backgroundColor={primaryGreen}>
-          <Typography variant="h1">Men's Clothing</Typography>
-        </Card>
-        <Card backgroundColor={primaryRed}>
-          <Typography variant="h1">Women's Clothing</Typography>
-        </Card>
-      </CategoryWrapper>
+      <Typography variant="h3">Flash Sale</Typography>
+      {isLoading || menIsLoading ? (
+        <Spinner />
+      ) : isError ? (
+        <ErrorMsg />
+      ) : (
+        <SaleCards
+          items={
+            Array.isArray(data) && Array.isArray(menData)
+              ? [...data, ...menData]
+              : []
+          }
+        />
+      )}
+      <Typography variant="h3">Categories</Typography>
+      <CategoryCards />
     </Container>
   );
 };
